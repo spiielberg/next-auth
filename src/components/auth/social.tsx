@@ -4,14 +4,18 @@ import { Button } from '@/components/ui/button'
 import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 
-export const Social = () => {
+interface SocialProps {
+  title: string
+}
+
+export const Social = ({ title }: SocialProps) => {
   return (
     <div className="flex flex-col items-center gap-y-3">
       <div className="flex w-full items-center gap-x-2">
         <div className="w-full border-t border-t-slate-100" />
 
         <p className="text-nowrap text-sm text-muted-foreground">
-          Sign In with
+          {title} with
         </p>
 
         <div className="w-full border-t border-t-slate-100" />

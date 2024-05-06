@@ -1,5 +1,6 @@
 'use client'
 
+import { signIn } from '@/actions/sign-in-action'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
@@ -14,10 +15,15 @@ import {
 import { Input } from '@/components/ui/input'
 import { SignInSchema } from '@/schemas/sign-in-schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 export const SignInForm = () => {
+  const [error, setError] = useState<string | undefined>()
+  const [success, setSuccess] = useState<string | undefined>()
+  const [isPending, startTransition] = useTransition()
+
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
@@ -26,12 +32,18 @@ export const SignInForm = () => {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof SignInSchema>) => {
-    console.log({ values })
+  const onSubmit = async (values: z.infer<typeof SignInSchema>) => {
+    startTransition(() => {
+      signIn(values).then((data) => {
+        setError(data.error)
+        setSuccess(data.success)
+      })
+    })
   }
 
   return (
     <CardWrapper
+      headerTitle="Sign In"
       headerLabel="Welcome back"
       backButtonLabel="Don't have an account?"
       backButtonHref="/auth/sign-up"
@@ -51,6 +63,7 @@ export const SignInForm = () => {
                       placeholder="Email"
                       type="email"
                       className="h-10"
+                      disabled={isPending}
                     />
                   </FormControl>
 
@@ -70,6 +83,7 @@ export const SignInForm = () => {
                       placeholder="Password"
                       type="password"
                       className="h-10"
+                      disabled={isPending}
                     />
                   </FormControl>
 
@@ -79,10 +93,15 @@ export const SignInForm = () => {
             />
           </div>
 
-          <FormError message="" />
-          <FormSuccess message="" />
+          <FormError message={error} />
+          <FormSuccess message={success} />
 
-          <Button type="submit" size="lg" className="w-full">
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            disabled={isPending}
+          >
             Sign In
           </Button>
         </form>

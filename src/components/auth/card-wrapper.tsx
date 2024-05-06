@@ -8,6 +8,7 @@ import { ReactNode } from 'react'
 
 interface CardWrapperProps {
   children: ReactNode
+  headerTitle: string
   headerLabel: string
   backButtonLabel: string
   backButtonHref: string
@@ -16,6 +17,7 @@ interface CardWrapperProps {
 
 export const CardWrapper = ({
   children,
+  headerTitle,
   headerLabel,
   backButtonLabel,
   backButtonHref,
@@ -24,14 +26,14 @@ export const CardWrapper = ({
   return (
     <Card className="w-96 shadow-md">
       <CardHeader>
-        <Header title="🔐 Sign In" label={headerLabel} />
+        <Header title={headerTitle} label={headerLabel} />
       </CardHeader>
 
       <CardContent>{children}</CardContent>
 
       {showSocial && (
         <CardContent>
-          <Social />
+          <Social title={headerTitle} />
         </CardContent>
       )}
 
