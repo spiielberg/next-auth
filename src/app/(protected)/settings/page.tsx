@@ -14,7 +14,7 @@ const SettingsPage = async () => {
         action={async () => {
           'use server'
 
-          await nextAuthSignOut()
+          await nextAuthSignOut({ redirect: true, redirectTo: '/' })
         }}
       >
         <Button type="submit">Sign out</Button>
