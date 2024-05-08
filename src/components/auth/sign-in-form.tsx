@@ -14,12 +14,18 @@ import {
 import { Input } from '@/components/ui/input'
 import { SignInSchema } from '@/schemas/sign-in-schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState, useTransition } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 export const SignInForm = () => {
+  const searchParams = useSearchParams()
+
+  const router = useRouter()
+
   const [error, setError] = useState<string | undefined>()
+
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<z.infer<typeof SignInSchema>>({
@@ -37,6 +43,20 @@ export const SignInForm = () => {
       })
     })
   }
+
+  const clearError = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString())
+
+    params.set('error', '')
+
+    return params.toString()
+  }, [searchParams])
+
+  useEffect(() => {
+    if (error) {
+      router.push(clearError())
+    }
+  }, [clearError, error, router])
 
   return (
     <CardWrapper
