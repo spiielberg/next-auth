@@ -17,8 +17,6 @@ export default middleware((req) => {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname)
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
 
-  console.log({ isSignedIn, isApiAuthRoute, isPublicRoute, isAuthRoute })
-
   if (isApiAuthRoute) {
     return
   }
