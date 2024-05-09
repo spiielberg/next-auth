@@ -44,3 +44,13 @@ model User {
 
   @@map("users")
 }
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String
+  expiresAt DateTime @map("expires_at")
+
+  @@unique([email, token])
+  @@map("verification_tokens")
+}

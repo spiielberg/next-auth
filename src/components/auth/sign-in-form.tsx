@@ -3,6 +3,7 @@
 import { signIn } from '@/actions/sign-in-action'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import { FormError } from '@/components/form-error'
+import { FormSuccess } from '@/components/form-success'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -25,6 +26,7 @@ export const SignInForm = () => {
   const router = useRouter()
 
   const [error, setError] = useState<string | undefined>()
+  const [success, setSuccess] = useState<string | undefined>()
 
   const [isPending, startTransition] = useTransition()
 
@@ -40,6 +42,7 @@ export const SignInForm = () => {
     startTransition(() => {
       signIn(values).then((data) => {
         setError(data?.error || '')
+        setSuccess(data?.success || '')
       })
     })
   }
@@ -53,10 +56,10 @@ export const SignInForm = () => {
   }, [searchParams])
 
   useEffect(() => {
-    if (error) {
+    if (error || success) {
       router.push(clearError())
     }
-  }, [clearError, error, router])
+  }, [clearError, error, router, success])
 
   return (
     <CardWrapper
@@ -111,6 +114,7 @@ export const SignInForm = () => {
           </div>
 
           <FormError message={error} />
+          <FormSuccess message={success} />
 
           <Button
             type="submit"

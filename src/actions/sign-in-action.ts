@@ -1,6 +1,9 @@
 'use server'
 
 import { nextAuthSignIn } from '@/auth'
+import { getUserByEmail } from '@/data/user'
+import { sendVerificationEmail } from '@/lib/mail'
+import { generateVerificationToken } from '@/lib/tokens'
 import { DEFAULT_SIGNIN_REDIRECT } from '@/routes'
 import { SignInSchema } from '@/schemas/sign-in-schema'
 import { AuthError } from 'next-auth'
@@ -16,6 +19,20 @@ export const signIn = async (value: z.infer<typeof SignInSchema>) => {
   }
 
   const { email, password } = validatedFields.data
+
+  const existingUser = await getUserByEmail(email)
+
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    return { error: 'Invalid credentials.' }
+  }
+
+  if (!existingUser.emailVerifiedAt) {
+    const verificationToken = await generateVerificationToken(email)
+
+    await sendVerificationEmail({ email, token: verificationToken.token })
+
+    return { success: 'Confirmation email sent.' }
+  }
 
   try {
     await nextAuthSignIn('credentials', {

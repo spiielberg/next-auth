@@ -38,6 +38,19 @@ export const {
 
       return session
     },
+    signIn: async ({ user, account }) => {
+      if (account?.provider !== 'credentials') {
+        return true
+      }
+
+      const existingUser = await getUserById(user.id || '')
+
+      if (!existingUser?.emailVerifiedAt) {
+        return false
+      }
+
+      return true
+    },
   },
   events: {
     linkAccount: async ({ user }) => {
