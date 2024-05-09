@@ -35,11 +35,18 @@ export const SignUpForm = () => {
   })
 
   const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
+    setError(undefined)
+    setSuccess(undefined)
+
     startTransition(() => {
-      signUp(values).then((data) => {
-        setError(data.error)
-        setSuccess(data.success)
-      })
+      signUp(values)
+        .then((data) => {
+          setError(data.error)
+          setSuccess(data.success)
+        })
+        .catch(() => {
+          setError('Something went wrong.')
+        })
     })
   }
 

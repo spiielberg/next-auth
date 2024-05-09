@@ -39,11 +39,18 @@ export const SignInForm = () => {
   })
 
   const onSubmit = async (values: z.infer<typeof SignInSchema>) => {
+    setError(undefined)
+    setSuccess(undefined)
+
     startTransition(() => {
-      signIn(values).then((data) => {
-        setError(data?.error || '')
-        setSuccess(data?.success || '')
-      })
+      signIn(values)
+        .then((data) => {
+          setError(data?.error || '')
+          setSuccess(data?.success || '')
+        })
+        .catch(() => {
+          setError('Something went wrong.')
+        })
     })
   }
 
