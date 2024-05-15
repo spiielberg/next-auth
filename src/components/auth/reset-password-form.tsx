@@ -1,6 +1,6 @@
 'use client'
 
-import { signIn } from '@/actions/sign-in-action'
+import { resetPassword } from '@/actions/reset-password'
 import { CardWrapper } from '@/components/auth/card-wrapper'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
@@ -13,38 +13,31 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { SignInSchema } from '@/schemas/sign-in-schema'
+import { ResetPasswordSchema } from '@/schemas/reset-password-schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useState, useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-export const SignInForm = () => {
-  const searchParams = useSearchParams()
-
-  const router = useRouter()
-
+export const ResetPasswordForm = () => {
   const [error, setError] = useState<string | undefined>()
   const [success, setSuccess] = useState<string | undefined>()
 
   const [isPending, startTransition] = useTransition()
 
-  const form = useForm<z.infer<typeof SignInSchema>>({
-    resolver: zodResolver(SignInSchema),
+  const form = useForm<z.infer<typeof ResetPasswordSchema>>({
+    resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
       email: '',
-      password: '',
     },
   })
 
-  const onSubmit = async (values: z.infer<typeof SignInSchema>) => {
+  const onSubmit = async (values: z.infer<typeof ResetPasswordSchema>) => {
     setError(undefined)
     setSuccess(undefined)
 
     startTransition(() => {
-      signIn(values)
+      resetPassword(values)
         .then((data) => {
           setError(data?.error || '')
           setSuccess(data?.success || '')
@@ -55,27 +48,12 @@ export const SignInForm = () => {
     })
   }
 
-  const clearError = useCallback(() => {
-    const params = new URLSearchParams(searchParams.toString())
-
-    params.set('error', '')
-
-    return params.toString()
-  }, [searchParams])
-
-  useEffect(() => {
-    if (error || success) {
-      router.push(clearError())
-    }
-  }, [clearError, error, router, success])
-
   return (
     <CardWrapper
-      headerTitle="Sign In"
-      headerLabel="Welcome back"
-      backButtonLabel="Don't have an account?"
-      backButtonHref="/auth/sign-up"
-      showSocial
+      headerTitle="Auth"
+      headerLabel="Forgot your password?"
+      backButtonLabel="Back to sign in"
+      backButtonHref="/auth/sign-in"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -99,35 +77,6 @@ export const SignInForm = () => {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Password"
-                      type="password"
-                      className="h-10"
-                      disabled={isPending}
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-
-                  <Button
-                    size="sm"
-                    variant="link"
-                    className="px-0 font-normal"
-                    asChild
-                  >
-                    <Link href="/auth/reset-password">Forgot password?</Link>
-                  </Button>
-                </FormItem>
-              )}
-            />
           </div>
 
           <FormError message={error} />
@@ -139,7 +88,7 @@ export const SignInForm = () => {
             className="w-full"
             disabled={isPending}
           >
-            Sign In
+            Send reset email
           </Button>
         </form>
       </Form>
