@@ -10,8 +10,6 @@ import { AuthError } from 'next-auth'
 import { z } from 'zod'
 
 export const signIn = async (value: z.infer<typeof SignInSchema>) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
   const validatedFields = SignInSchema.safeParse(value)
 
   if (!validatedFields.success) {
