@@ -2,6 +2,7 @@ export const publicRoutes = ['/', '/auth/new-verification']
 
 export const authRoutes = [
   '/auth/error',
+  '/auth/new-password',
   '/auth/sign-in',
   '/auth/sign-up',
   '/auth/reset-password',
