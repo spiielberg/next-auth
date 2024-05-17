@@ -7,6 +7,11 @@ interface SendPasswordResetEmailProps {
   token: string
 }
 
+interface SendTwoFactorEmailProps {
+  email: string
+  token: string
+}
+
 interface SendVerificationEmailProps {
   email: string
   token: string
@@ -27,6 +32,18 @@ export const sendPasswordResetEmail = async ({
         Click <a href="${resetPasswordLink}">here</a> to reset your password.
       </p>
     `,
+  })
+}
+
+export const sendTwoFactorEmail = async ({
+  email,
+  token,
+}: SendTwoFactorEmailProps) => {
+  await resend.emails.send({
+    from: 'onboarding@resend.dev',
+    to: email,
+    subject: '2FA Code',
+    html: `<p>Your 2FA Code: ${token}</p>`,
   })
 }
 
