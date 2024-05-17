@@ -1,24 +1,9 @@
-import { auth, nextAuthSignOut } from '@/auth'
-import { Button } from '@/components/ui/button'
+'use client'
 
-const SettingsPage = async () => {
-  const session = await auth()
-
+const SettingsPage = () => {
   return (
-    <div className="space-y-2">
-      <p>SettingsPage</p>
-
-      <p>{JSON.stringify(session)}</p>
-
-      <form
-        action={async () => {
-          'use server'
-
-          await nextAuthSignOut({ redirect: true, redirectTo: '/' })
-        }}
-      >
-        <Button type="submit">Sign out</Button>
-      </form>
+    <div className="w-full rounded-xl bg-white px-6 py-10">
+      <p>Settings</p>
     </div>
   )
 }
