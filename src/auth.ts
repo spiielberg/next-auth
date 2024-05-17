@@ -46,7 +46,7 @@ export const {
 
       const existingUser = await getUserById(user.id || '')
 
-      if (!existingUser?.emailVerifiedAt) {
+      if (!existingUser?.emailVerified) {
         return false
       }
 
@@ -71,7 +71,7 @@ export const {
     linkAccount: async ({ user }) => {
       await db.user.update({
         where: { id: user.id },
-        data: { emailVerifiedAt: new Date() },
+        data: { emailVerified: new Date() },
       })
     },
   },

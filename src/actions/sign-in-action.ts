@@ -34,7 +34,7 @@ export const signIn = async (value: z.infer<typeof SignInSchema>) => {
     return { error: 'Invalid credentials.' }
   }
 
-  if (!existingUser.emailVerifiedAt) {
+  if (!existingUser.emailVerified) {
     const verificationToken = await generateVerificationToken(email)
 
     await sendVerificationEmail({ email, token: verificationToken.token })

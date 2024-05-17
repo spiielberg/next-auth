@@ -23,14 +23,14 @@ export const newVerification = async (token: string) => {
     return { error: 'Email does not exist.' }
   }
 
-  if (existingUser.emailVerifiedAt) {
+  if (existingUser.emailVerified) {
     return { success: 'Email already verified.' }
   }
 
   await db.user.update({
     where: { id: existingUser.id },
     data: {
-      emailVerifiedAt: new Date(),
+      emailVerified: new Date(),
       email: existingToken.email,
     },
   })
