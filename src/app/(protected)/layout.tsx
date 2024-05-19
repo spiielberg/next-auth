@@ -8,8 +8,8 @@ const ProtectedLayout = async ({ children }: { children: ReactNode }) => {
 
   return (
     <SessionProvider session={session}>
-      <div className="flex h-full items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-600 to-slate-950">
-        <div className="container flex flex-col items-center justify-center gap-y-10">
+      <div className="flex min-h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-600 to-slate-950 py-5">
+        <div className="container flex flex-col gap-y-10">
           <Navbar />
 
           {children}

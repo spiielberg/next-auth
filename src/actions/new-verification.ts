@@ -17,6 +17,28 @@ export const newVerification = async (token: string) => {
     return { error: 'Token has expired.' }
   }
 
+  if (existingToken.isToChangeEmail && existingToken.oldEmail) {
+    const existingUser = await getUserByEmail(existingToken.oldEmail)
+
+    if (!existingUser) {
+      return { error: 'Email does not exist.' }
+    }
+
+    await db.user.update({
+      where: { id: existingUser.id },
+      data: {
+        emailVerified: new Date(),
+        email: existingToken.email,
+      },
+    })
+
+    await db.verificationToken.delete({
+      where: { id: existingToken.id },
+    })
+
+    return { success: 'Email updated.' }
+  }
+
   const existingUser = await getUserByEmail(existingToken.email)
 
   if (!existingUser) {

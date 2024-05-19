@@ -53,7 +53,15 @@ export const generateTwoFactorToken = async (email: string) => {
   return twoFactorToken
 }
 
-export const generateVerificationToken = async (email: string) => {
+export const generateVerificationToken = async ({
+  email,
+  isToChangeEmail = false,
+  oldEmail,
+}: {
+  email: string
+  isToChangeEmail?: boolean
+  oldEmail?: string
+}) => {
   const existingToken = await getVerificationTokenByEmail(email)
 
   if (existingToken) {
@@ -71,6 +79,8 @@ export const generateVerificationToken = async (email: string) => {
       email,
       token,
       expiresAt,
+      isToChangeEmail,
+      oldEmail,
     },
   })
 

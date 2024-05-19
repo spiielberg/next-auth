@@ -48,10 +48,12 @@ model User {
 }
 
 model VerificationToken {
-  id        String   @id @default(cuid())
-  token     String   @unique
-  email     String
-  expiresAt DateTime @map("expires_at")
+  id              String   @id @default(cuid())
+  token           String   @unique
+  email           String
+  expiresAt       DateTime @map("expires_at")
+  isToChangeEmail Boolean  @default(false) @map("is_to_change_email")
+  oldEmail        String?  @map("old_email")
 
   @@unique([email, token])
   @@map("verification_tokens")
