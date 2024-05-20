@@ -14,13 +14,16 @@ interface SocialProps {
 
 export const Social = ({ title }: SocialProps) => {
   const searchParams = useSearchParams()
+
+  const callbackUrl = searchParams.get('callbackUrl')
+
   const error =
     searchParams.get('error') === 'OAuthAccountNotLinked'
       ? 'Email already in use with different provider.'
       : ''
 
   const onClick = (provider: 'google' | 'github') => {
-    signIn(provider, { callbackUrl: DEFAULT_SIGNIN_REDIRECT })
+    signIn(provider, { callbackUrl: callbackUrl || DEFAULT_SIGNIN_REDIRECT })
   }
 
   return (

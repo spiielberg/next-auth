@@ -13,7 +13,12 @@ import bcrypt from 'bcryptjs'
 import { AuthError } from 'next-auth'
 import { z } from 'zod'
 
-export const signIn = async (value: z.infer<typeof SignInSchema>) => {
+interface SignInProps {
+  callbackUrl?: string | null
+  value: z.infer<typeof SignInSchema>
+}
+
+export const signIn = async ({ value, callbackUrl }: SignInProps) => {
   const validatedFields = SignInSchema.safeParse(value)
 
   if (!validatedFields.success) {
@@ -91,7 +96,7 @@ export const signIn = async (value: z.infer<typeof SignInSchema>) => {
     await nextAuthSignIn('credentials', {
       email,
       password,
-      redirectTo: DEFAULT_SIGNIN_REDIRECT,
+      redirectTo: callbackUrl || DEFAULT_SIGNIN_REDIRECT,
     })
   } catch (error) {
     if (error instanceof AuthError) {

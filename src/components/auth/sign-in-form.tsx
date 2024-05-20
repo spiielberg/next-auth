@@ -24,6 +24,8 @@ import { z } from 'zod'
 export const SignInForm = () => {
   const searchParams = useSearchParams()
 
+  const callbackUrl = searchParams.get('callbackUrl')
+
   const router = useRouter()
 
   const [showTwoFactor, setShowTwoFactor] = useState(false)
@@ -46,7 +48,7 @@ export const SignInForm = () => {
     setSuccess(undefined)
 
     startTransition(() => {
-      signIn(values)
+      signIn({ value: values, callbackUrl })
         .then((data) => {
           if (data?.error) {
             setError(data.error)
