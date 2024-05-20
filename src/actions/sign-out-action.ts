@@ -3,5 +3,5 @@
 import { nextAuthSignOut } from '@/auth'
 
 export const signOut = async () => {
-  await nextAuthSignOut()
+  await nextAuthSignOut({ redirect: true, redirectTo: '/' })
 }
