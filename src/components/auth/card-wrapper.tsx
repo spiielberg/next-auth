@@ -4,7 +4,7 @@ import { BackButton } from '@/components/auth/back-button'
 import { Header } from '@/components/auth/header'
 import { Social } from '@/components/auth/social'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { ReactNode } from 'react'
+import { ReactNode, Suspense } from 'react'
 
 interface CardWrapperProps {
   children: ReactNode
@@ -35,7 +35,9 @@ export const CardWrapper = ({
 
       {showSocial && (
         <CardContent>
-          <Social title={headerTitle} />
+          <Suspense>
+            <Social title={headerTitle} />
+          </Suspense>
         </CardContent>
       )}
 
