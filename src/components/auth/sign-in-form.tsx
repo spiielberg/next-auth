@@ -17,7 +17,7 @@ import { SignInSchema } from '@/schemas/sign-in-schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useState, useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -44,6 +44,8 @@ export const SignInForm = () => {
   })
 
   const onSubmit = async (values: z.infer<typeof SignInSchema>) => {
+    router.push('/auth/sign-in')
+
     setError(undefined)
     setSuccess(undefined)
 
@@ -67,20 +69,6 @@ export const SignInForm = () => {
         })
     })
   }
-
-  const clearError = useCallback(() => {
-    const params = new URLSearchParams(searchParams.toString())
-
-    params.set('error', '')
-
-    return params.toString()
-  }, [searchParams])
-
-  useEffect(() => {
-    if (error || success) {
-      router.push(clearError())
-    }
-  }, [clearError, error, router, success])
 
   return (
     <CardWrapper
